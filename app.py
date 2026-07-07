@@ -1,28 +1,65 @@
 import streamlit as st
 import pandas as pd
 
-# -----------------------------
-# Configuración de la página
-# -----------------------------
 st.set_page_config(
     page_title="IA en Comunicación Audiovisual",
     page_icon="🎬",
     layout="wide"
 )
 
-# -----------------------------
-# Título
-# -----------------------------
 st.title("🎬 Mapa Interactivo del Impacto de la IA en la Comunicación Audiovisual")
 
 st.markdown("""
 Esta aplicación muestra cómo la Inteligencia Artificial está transformando las distintas
-etapas del proceso audiovisual. Explora cada etapa y conoce sus beneficios,
-riesgos y las competencias que necesita el comunicador del futuro.
+etapas del proceso audiovisual.
 """)
 
 # -----------------------------
-# Base de datos
+# Mapa visual del flujo
+# -----------------------------
+st.markdown("## 🗺️ Mapa del flujo audiovisual con IA")
+
+col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
+
+with col1:
+    st.markdown("### 🔍")
+    st.markdown("**Investigación**")
+    st.caption("IA analiza audiencias")
+
+with col2:
+    st.markdown("### ✍️")
+    st.markdown("**Guion**")
+    st.caption("IA apoya ideas")
+
+with col3:
+    st.markdown("### 🎥")
+    st.markdown("**Producción**")
+    st.caption("IA organiza recursos")
+
+with col4:
+    st.markdown("### ✂️")
+    st.markdown("**Edición**")
+    st.caption("IA automatiza procesos")
+
+with col5:
+    st.markdown("### 🎨")
+    st.markdown("**Diseño visual**")
+    st.caption("IA genera conceptos")
+
+with col6:
+    st.markdown("### 📡")
+    st.markdown("**Distribución**")
+    st.caption("IA personaliza contenido")
+
+with col7:
+    st.markdown("### 📊")
+    st.markdown("**Análisis**")
+    st.caption("IA interpreta métricas")
+
+st.markdown("---")
+
+# -----------------------------
+# Datos
 # -----------------------------
 datos = {
     "Etapa": [
@@ -34,7 +71,6 @@ datos = {
         "Distribución",
         "Análisis de audiencia"
     ],
-
     "Uso de IA": [
         "Análisis de tendencias y audiencias.",
         "Generación de ideas y apoyo en escritura.",
@@ -44,7 +80,6 @@ datos = {
         "Personalización y recomendación de contenido.",
         "Interpretación de métricas y comportamiento del público."
     ],
-
     "Beneficio": [
         "Comprender mejor al público.",
         "Acelerar la creatividad.",
@@ -54,7 +89,6 @@ datos = {
         "Mejorar el alcance del contenido.",
         "Tomar decisiones basadas en datos."
     ],
-
     "Riesgo": [
         "Sesgos en los datos.",
         "Pérdida de creatividad.",
@@ -64,9 +98,7 @@ datos = {
         "Manipulación algorítmica.",
         "Malinterpretación de métricas."
     ],
-
-    "Impacto": [4,3,3,5,4,4,5],
-
+    "Impacto": [4, 3, 3, 5, 4, 4, 5],
     "Competencia": [
         "Análisis de datos.",
         "Pensamiento creativo.",
@@ -113,9 +145,6 @@ enfoque = st.sidebar.radio(
     ["Beneficio", "Riesgo", "Competencia"]
 )
 
-# -----------------------------
-# Filtrado
-# -----------------------------
 fila = df[df["Etapa"] == etapa].iloc[0]
 
 # -----------------------------
@@ -133,15 +162,12 @@ col3.metric("Tecnología", "IA")
 # Uso de IA
 # -----------------------------
 st.markdown("## 🤖 Uso de la IA")
-
 st.info(fila["Uso de IA"])
 
 # -----------------------------
 # Tabs
 # -----------------------------
-tab1, tab2, tab3 = st.tabs(
-    ["✅ Beneficio", "⚠️ Riesgo", "🎓 Competencia"]
-)
+tab1, tab2, tab3 = st.tabs(["✅ Beneficio", "⚠️ Riesgo", "🎓 Competencia"])
 
 with tab1:
     st.success(fila["Beneficio"])
@@ -153,23 +179,21 @@ with tab3:
     st.info(fila["Competencia"])
 
 # -----------------------------
-# Radio
+# Información destacada
 # -----------------------------
 st.markdown("## 🔍 Información destacada")
 
 if enfoque == "Beneficio":
     st.success(fila["Beneficio"])
-
 elif enfoque == "Riesgo":
     st.warning(fila["Riesgo"])
-
 else:
     st.info(fila["Competencia"])
 
 # -----------------------------
 # Gráfico
 # -----------------------------
-st.markdown("## 📊 Nivel de impacto")
+st.markdown("## 📊 Nivel de impacto por etapa")
 
 df_filtrado = df[df["Impacto"] >= impacto]
 
@@ -186,17 +210,15 @@ comparacion = df[df["Etapa"].isin(comparar)]
 
 if len(comparacion) > 0:
     st.dataframe(comparacion, use_container_width=True)
+else:
+    st.warning("Selecciona al menos una etapa para comparar.")
 
 # -----------------------------
 # Tabla completa
 # -----------------------------
 if mostrar_tabla:
     st.markdown("## 📑 Base de datos")
-
-    st.dataframe(
-        df,
-        use_container_width=True
-    )
+    st.dataframe(df, use_container_width=True)
 
 # -----------------------------
 # Conclusión
