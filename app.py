@@ -1,22 +1,29 @@
 import streamlit as st
 import pandas as pd
 
+# -----------------------------
 # Configuración de la página
+# -----------------------------
 st.set_page_config(
     page_title="IA en Comunicación Audiovisual",
     page_icon="🎬",
     layout="wide"
 )
 
-# Título principal
-st.title("🎬 Mapa interactivo del impacto de la IA en la Comunicación Audiovisual")
+# -----------------------------
+# Título
+# -----------------------------
+st.title("🎬 Mapa Interactivo del Impacto de la IA en la Comunicación Audiovisual")
 
 st.markdown("""
-Esta aplicación complementa la presentación principal mostrando cómo la Inteligencia Artificial 
-está transformando distintas etapas del proceso audiovisual.
+Esta aplicación muestra cómo la Inteligencia Artificial está transformando las distintas
+etapas del proceso audiovisual. Explora cada etapa y conoce sus beneficios,
+riesgos y las competencias que necesita el comunicador del futuro.
 """)
 
-# Datos
+# -----------------------------
+# Base de datos
+# -----------------------------
 datos = {
     "Etapa": [
         "Investigación",
@@ -27,111 +34,180 @@ datos = {
         "Distribución",
         "Análisis de audiencia"
     ],
+
     "Uso de IA": [
-        "Análisis de tendencias, audiencias y consumo de contenido.",
-        "Generación de ideas, estructuras narrativas y apoyo en escritura.",
-        "Planificación de rodajes, organización de recursos y asistencia creativa.",
-        "Edición automática, subtitulado, mejora de audio y selección de clips.",
-        "Creación de imágenes, storyboards, piezas gráficas y estilos visuales.",
-        "Personalización de contenidos y recomendación algorítmica.",
-        "Interpretación de métricas, comportamiento del público y engagement."
+        "Análisis de tendencias y audiencias.",
+        "Generación de ideas y apoyo en escritura.",
+        "Planificación y organización de recursos.",
+        "Edición automática, subtítulos y mejora de audio.",
+        "Creación de imágenes y storyboards.",
+        "Personalización y recomendación de contenido.",
+        "Interpretación de métricas y comportamiento del público."
     ],
+
     "Beneficio": [
-        "Permite comprender mejor al público objetivo.",
-        "Acelera la creación de propuestas narrativas.",
-        "Optimiza tiempos y recursos de producción.",
-        "Reduce tiempos técnicos de postproducción.",
-        "Facilita la creación rápida de conceptos visuales.",
-        "Mejora el alcance y la segmentación del contenido.",
-        "Ayuda a tomar decisiones basadas en datos."
+        "Comprender mejor al público.",
+        "Acelerar la creatividad.",
+        "Optimizar recursos.",
+        "Reducir tiempos de edición.",
+        "Crear conceptos visuales rápidamente.",
+        "Mejorar el alcance del contenido.",
+        "Tomar decisiones basadas en datos."
     ],
+
     "Riesgo": [
-        "Sesgos en los datos utilizados.",
-        "Pérdida de originalidad o dependencia creativa.",
-        "Dependencia excesiva de herramientas tecnológicas.",
-        "Pérdida del criterio humano en decisiones estéticas.",
-        "Problemas de derechos de autor y autenticidad visual.",
-        "Manipulación algorítmica o burbujas de contenido.",
-        "Interpretación superficial de las métricas."
+        "Sesgos en los datos.",
+        "Pérdida de creatividad.",
+        "Dependencia tecnológica.",
+        "Menor criterio humano.",
+        "Problemas de derechos de autor.",
+        "Manipulación algorítmica.",
+        "Malinterpretación de métricas."
     ],
-    "Impacto": [4, 3, 3, 5, 4, 4, 5],
-    "Competencia profesional": [
-        "Lectura crítica de datos.",
-        "Curaduría narrativa y pensamiento creativo.",
-        "Gestión audiovisual con apoyo tecnológico.",
-        "Criterio estético y técnico en edición.",
+
+    "Impacto": [4,3,3,5,4,4,5],
+
+    "Competencia": [
+        "Análisis de datos.",
+        "Pensamiento creativo.",
+        "Gestión audiovisual.",
+        "Edición profesional.",
         "Dirección visual ética.",
-        "Estrategia digital y comunicación multiplataforma.",
-        "Visualización e interpretación de datos."
+        "Marketing digital.",
+        "Visualización de datos."
     ]
 }
 
 df = pd.DataFrame(datos)
 
+# -----------------------------
 # Sidebar
-st.sidebar.header("Panel de navegación")
-etapa_seleccionada = st.sidebar.selectbox(
-    "Selecciona una etapa del proceso audiovisual:",
+# -----------------------------
+st.sidebar.title("🎛️ Panel de Control")
+
+etapa = st.sidebar.selectbox(
+    "Selecciona una etapa",
     df["Etapa"]
 )
 
-st.sidebar.markdown("---")
-st.sidebar.info(
-    "Esta app muestra cómo la IA impacta el flujo de trabajo audiovisual."
+impacto = st.sidebar.slider(
+    "Impacto mínimo",
+    1,
+    5,
+    3
 )
 
-# Filtrar datos
-fila = df[df["Etapa"] == etapa_seleccionada].iloc[0]
+comparar = st.sidebar.multiselect(
+    "Comparar etapas",
+    df["Etapa"],
+    default=["Edición", "Diseño visual"]
+)
 
-# Métricas principales
-st.subheader(f"Etapa seleccionada: {etapa_seleccionada}")
+mostrar_tabla = st.sidebar.checkbox(
+    "Mostrar tabla completa",
+    value=True
+)
+
+enfoque = st.sidebar.radio(
+    "Información a mostrar",
+    ["Beneficio", "Riesgo", "Competencia"]
+)
+
+# -----------------------------
+# Filtrado
+# -----------------------------
+fila = df[df["Etapa"] == etapa].iloc[0]
+
+# -----------------------------
+# Métricas
+# -----------------------------
+st.subheader(f"📍 Etapa seleccionada: {etapa}")
 
 col1, col2, col3 = st.columns(3)
 
-with col1:
-    st.metric("Nivel de impacto", f"{fila['Impacto']} / 5")
+col1.metric("Impacto", f"{fila['Impacto']} / 5")
+col2.metric("Área", "Comunicación")
+col3.metric("Tecnología", "IA")
 
-with col2:
-    st.metric("Área", "Comunicación Audiovisual")
+# -----------------------------
+# Uso de IA
+# -----------------------------
+st.markdown("## 🤖 Uso de la IA")
 
-with col3:
-    st.metric("Enfoque", "IA + Storytelling")
+st.info(fila["Uso de IA"])
 
-# Información principal
-st.markdown("## Uso de IA en esta etapa")
-st.write(fila["Uso de IA"])
-
+# -----------------------------
 # Tabs
-tab1, tab2, tab3 = st.tabs(["✅ Beneficio", "⚠️ Riesgo", "🎓 Competencia"])
+# -----------------------------
+tab1, tab2, tab3 = st.tabs(
+    ["✅ Beneficio", "⚠️ Riesgo", "🎓 Competencia"]
+)
 
 with tab1:
-    st.subheader("Beneficio principal")
-    st.write(fila["Beneficio"])
+    st.success(fila["Beneficio"])
 
 with tab2:
-    st.subheader("Riesgo o desafío ético")
-    st.write(fila["Riesgo"])
+    st.error(fila["Riesgo"])
 
 with tab3:
-    st.subheader("Competencia profesional necesaria")
-    st.write(fila["Competencia profesional"])
+    st.info(fila["Competencia"])
 
+# -----------------------------
+# Radio
+# -----------------------------
+st.markdown("## 🔍 Información destacada")
+
+if enfoque == "Beneficio":
+    st.success(fila["Beneficio"])
+
+elif enfoque == "Riesgo":
+    st.warning(fila["Riesgo"])
+
+else:
+    st.info(fila["Competencia"])
+
+# -----------------------------
 # Gráfico
-st.markdown("## Visualización del impacto por etapa")
+# -----------------------------
+st.markdown("## 📊 Nivel de impacto")
 
-grafico = df.set_index("Etapa")["Impacto"]
-st.bar_chart(grafico)
+df_filtrado = df[df["Impacto"] >= impacto]
 
+st.bar_chart(
+    df_filtrado.set_index("Etapa")["Impacto"]
+)
+
+# -----------------------------
+# Comparación
+# -----------------------------
+st.markdown("## 📋 Comparación de etapas")
+
+comparacion = df[df["Etapa"].isin(comparar)]
+
+if len(comparacion) > 0:
+    st.dataframe(comparacion, use_container_width=True)
+
+# -----------------------------
 # Tabla completa
-st.markdown("## Tabla general del análisis")
-st.dataframe(df, use_container_width=True)
+# -----------------------------
+if mostrar_tabla:
+    st.markdown("## 📑 Base de datos")
 
+    st.dataframe(
+        df,
+        use_container_width=True
+    )
+
+# -----------------------------
 # Conclusión
+# -----------------------------
 st.markdown("---")
-st.markdown("""
-### Conclusión
 
-La Inteligencia Artificial no reemplaza completamente al comunicador audiovisual, 
-pero sí transforma sus herramientas, procesos y competencias.  
-El reto principal es combinar automatización con criterio creativo, ético y narrativo.
+st.subheader("🎯 Conclusión")
+
+st.write("""
+La Inteligencia Artificial está transformando todas las fases de la Comunicación Audiovisual.
+Su verdadero potencial no consiste en reemplazar al profesional, sino en potenciar su creatividad,
+optimizar procesos y apoyar la toma de decisiones. El desafío es utilizar estas herramientas de
+forma ética, crítica y responsable.
 """)
